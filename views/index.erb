@@ -2,39 +2,50 @@
 <html lang="en">
 
 	<head>
+		
 	    <meta charset='UTF-8' />
 	    <title>Mustache Yourself</title>
 	    <link rel="icon" href="/images/favicon.ico" \>
 
 	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" \>
 	    <link rel="stylesheet" href="/css/style.css" \>
-		<link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Kaushan+Script' \>
+		<link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Over+the+Rainbow' \>
 
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 		<script src="/javascript/processing.min.js"></script>
 
    </head>
 
 	<body>
+
+		 <div class="jumbotron">
+	      <div class="container">
+	        <div class="header-wrapper">
+			 	<h1>Mustache Yourself</h1>
+			</div>
+			<div class="instructions">
+			  <h3>{ Click on the image to place the mustache }</h3>
+			</div>
+	      </div>
+	    </div>
+
 		<div class="site-wrapper container-fluid">
 			<div class="row">
 				
 				<div class="col-md-6 col-md-offset-3">
-					<div id="brand">
-						<h1>Mustache Yourself</h1>
-					</div>
-
-					<div id="app">
+					<div class="app-wrapper">
 						<input id="upload-file" placeholder="Choose File" disabled="disabled" />
+						
 						<div class="file-upload btn btn-upload">
-						    <span>UPLOAD IMAGE</span>
-						    <input type="file" id="image" class="upload" onchange="uploadImage();" accept="image/*"  />
+							<span>UPLOAD IMAGE</span>
+							<input type="file" id="upload-btn" class="upload" onchange="uploadImage();" accept="image/*"  />
+						</div>
+						<input type="range" id="size-range" />
+
+						<div class="canvas-wrapper">
+							<canvas id="canvas"></canvas>
 						</div>
 
-						<div id="instructions">
-							<h4>{ Click on the image to place the mustache }</h4>
-						</div>
-
-						<canvas id="canvas"></canvas>
 						<a id="download" class="btn btn-info" download="mustache-me.png">DOWNLOAD</a>
 					</div>
 				</div>
