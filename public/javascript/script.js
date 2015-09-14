@@ -1,45 +1,75 @@
-var preview = document.querySelector('#preview'); //selects the query named img
- 
 var canvas = document.querySelector("#canvas");
-var sketch = new Processing.Sketch();
 var img;
+var x;
+var y;
+
+const max = 600;
+
+var sketch = new Processing.Sketch();
 
 sketch.attachFunction = function(proc) {
   proc.setup = function() {
-    proc.background(51);
-    proc.size(480, 480);
+    proc.background(255);
+    proc.size(max, max);
   };
 
-  function drawMustache() {
-    renderImage();
-    mustache(proc.mouseX, proc.mouseY, 70);
+  proc.resizeCanvas = function (width, height) {
+    proc.size(width, height);
   }
 
-  function mustache(x, y, len) {
+  proc.drawMustache = function(size) {
+    renderImage(function() {
+      mustache(size);
+    });
+  }
+
+  function mustache(len) {
     proc.fill(0);
     proc.beginShape();
     proc.bezier(x + len, y, x + len/2, y, x + len/4, y - len/2, x, y);
     proc.bezier(x - len, y, x - len/2, y, x - len/4, y - len/2, x, y);
     proc.bezier(x - len, y, x - len, y, x, y + len/4, x + len, y);
     proc.endShape();
-    proc.smooth(2);
   }
 
   // mouse event
   proc.mouseClicked = function() {
-    drawMustache();
+    x = proc.mouseX;
+    y = proc.mouseY;
+
+    var size = parseInt(document.querySelector('#size-range').value);
+    proc.drawMustache(size);
   };
 };
 
-function renderImage() {
+// attaching the sketch to the canvas
+var proc = new Processing(canvas, sketch);
+renderRangeInput();
+renderDownload();
+
+function scaledWidth() {
+  return (img.width < max) ? img.width : max;
+}
+
+function scaledHeight(width) {
+  return (width * img.height) / img.width; 
+}
+
+function renderImage(callback) {
   if (img) {
     var context = canvas.getContext("2d");
-    context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
+
+    var width = scaledWidth();
+    var height = scaledHeight(width);
+
+    proc.resizeCanvas(width, height);
+    context.drawImage(img, 0, 0, img.width, img.height, 0, 0, width, height);
+    typeof callback === 'function' && callback();
   }
 }
 
 function uploadImage() {
-  var file    = document.querySelector('#image').files[0];
+  var file    = document.querySelector('#upload-btn').files[0];
   var reader  = new FileReader();
 
   reader.onloadend = function () {
@@ -54,7 +84,19 @@ function uploadImage() {
 
   if (file) {
     reader.readAsDataURL(file); //reads the data as a URL
-  } 
+  }
+}
+
+function renderRangeInput() {
+  var range = document.querySelector('#size-range');
+  range.defaultValue = canvas.width/8;
+  range.min = 0;
+  range.max = canvas.width/4;
+  
+  range.addEventListener('change', function(ev) {
+    range.defaultValue = parseInt(range.value);
+    proc.drawMustache(parseInt(range.value));
+  }, false);
 }
 
 function renderDownload(){
@@ -62,10 +104,4 @@ function renderDownload(){
   link.addEventListener('click', function(ev) {
       link.href = canvas.toDataURL();
   }, false);
-}
-
-window.onload = function(){
-  // attaching the sketch to the canvas
-  new Processing(canvas, sketch);
-  renderDownload();
 }
