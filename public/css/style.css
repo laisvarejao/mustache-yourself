@@ -23,8 +23,9 @@ canvas {
 }
 
 .header-wrapper h1 {
-  font-family: 'Over the Rainbow', 'Helvetica Neue', Helvetica, Arial, cursive; 
+  font-family: 'Bitter', serif;
   font-size: 70px;
+  font-weight: 700;
   color: #fed136;
 }
 
