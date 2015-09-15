@@ -57,8 +57,13 @@ input#upload-file {
   height: 35px;
 }
 
-input#size-range {
-  margin-bottom: 10px;
+input[type=range] {
+  margin:auto;
+  width: 500px;
+}
+
+.range-wrapper {
+  margin: 20px;
 }
 
 .btn {
